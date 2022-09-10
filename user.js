@@ -2,8 +2,19 @@ console.log();
 
 const postListEl = document.querySelector('.post-list');
 
-function onSearchChange(event) {
-    console.log(event.target.value)
+async function onSearchChange(event) {
+    const id = event.target.value;
+    const posts = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
+    const postsData = await posts.json();
+    postListEl.innerHTML = postsData.map(post =>
+    `<div class="post" onclick="showUserPosts(${post})">
+    <div class="post__title">
+        ${post.title}
+    </div>
+    <p class="post__body">
+      ${post.body}
+    </p>
+  </div>`).join('');
 }
 
 async function main() {
@@ -11,23 +22,16 @@ async function main() {
     const posts = await fetch(`https://jsonplaceholder.typicode.com/posts?userId=${id}`)
     const postsData = await posts.json();
 
-    postListEl.innerHTML = postsData.map((post) => postHTML(post)).join('');
-}
-
-function showUserPosts(post) {
-    localStorage.setItem("post", post);
-    window.location.href = `${window.location.origin}/user.html`
-}
-
-function postHTML(post) {
-    return `<div class="post" onclick="showUserPosts(${post})">
+    postListEl.innerHTML = postsData.map(post =>
+    `<div class="post">
     <div class="post__title">
         ${post.title}
     </div>
     <p class="post__body">
       ${post.body}
     </p>
-  </div>`
+  </div>`).join('');
 }
+
 
 main();
