@@ -28,4 +28,4 @@ function postsHTML(post){
 }
 
 
-renderPosts();
+renderPosts(id);
